@@ -4,7 +4,11 @@ const Person = require('./models/person');
 
 
 passport.use(new localStrategy(async(username, password, done)=>{ 
+    //First check request headers has authorization or not
+    const authorization= req.headers.authorization
+    if(!authorization) return res.status(401).json({error: 'Token not found'});
     //authentication logic here
+
     try{
         //console.log('Received credentials:',USERNAME, password);
         const user = await Person.findOne({username});
@@ -25,6 +29,10 @@ passport.use(new localStrategy(async(username, password, done)=>{
         return done(err);
     }
 }));
+
+
+
+module.exports=passport; 
 
 
 
